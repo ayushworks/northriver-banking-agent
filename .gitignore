@@ -7,3 +7,4 @@ frontend/dist/
 assets/
 .DS_Store
 .claude
+.idea
