@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="780" viewBox="0 0 1400 780"
+     xmlns="http://www.w3.org/2000/svg"
+     font-family="'Google Sans', Roboto, 'Helvetica Neue', Arial, sans-serif">
+
+  <!-- ═══════════════════════════════════════════════════ DEFS ══ -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#5F6368"/>
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1A73E8"/>
+    </marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#7C4DFF"/>
+    </marker>
+    <marker id="arr-orange" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#F57C00"/>
+    </marker>
+    <marker id="arr-start" viewBox="0 0 10 10" refX="1" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M10,0 L0,5 L10,10 Z" fill="#1A73E8"/>
+    </marker>
+    <marker id="arr-start-gray" viewBox="0 0 10 10" refX="1" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M10,0 L0,5 L10,10 Z" fill="#5F6368"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════ BACKGROUND ══ -->
+  <rect width="1400" height="780" fill="#FFFFFF"/>
+
+  <!-- ══════════════════════════════════════════════════ TITLE ══ -->
+  <text x="700" y="28" text-anchor="middle" font-size="19" font-weight="600"
+        fill="#202124">Nova Banking Agent — System Architecture</text>
+  <text x="700" y="48" text-anchor="middle" font-size="12" fill="#5F6368">
+    Gemini Live · Google ADK · Cloud Run · Firestore · Cloud Build
+  </text>
+
+  <!-- ══════════════════════════════════════════ CLIENT LABEL ══ -->
+  <text x="106" y="72" text-anchor="middle" font-size="10" font-weight="600"
+        fill="#5F6368" letter-spacing="0.08em">CLIENT</text>
+
+  <!-- ── Browser ── -->
+  <rect x="18" y="78" width="176" height="125" rx="8"
+        fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+  <!-- browser chrome bar -->
+  <rect x="18" y="78" width="176" height="22" rx="8" fill="#1A73E8"/>
+  <rect x="18" y="89" width="176" height="11" fill="#1A73E8"/>
+  <circle cx="32" cy="89" r="4" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="46" cy="89" r="4" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="60" cy="89" r="4" fill="rgba(255,255,255,0.5)"/>
+  <!-- screen lines -->
+  <line x1="34" y1="116" x2="105" y2="116" stroke="#DADCE0" stroke-width="1.5"/>
+  <line x1="34" y1="127" x2="130" y2="127" stroke="#DADCE0" stroke-width="1.5"/>
+  <line x1="34" y1="138" x2="88"  y2="138" stroke="#DADCE0" stroke-width="1.5"/>
+  <text x="106" y="160" text-anchor="middle" font-size="11" font-weight="600" fill="#202124">Browser</text>
+  <text x="106" y="174" text-anchor="middle" font-size="10" fill="#5F6368">React + Vite</text>
+  <text x="106" y="188" text-anchor="middle" font-size="10" fill="#5F6368">AudioPlayer.js</text>
+
+  <!-- ── AudioCapture ── -->
+  <rect x="18" y="215" width="176" height="70" rx="8"
+        fill="#E8F5E9" stroke="#34A853" stroke-width="1.5"/>
+  <text x="106" y="238" text-anchor="middle" font-size="18">🎙</text>
+  <text x="106" y="258" text-anchor="middle" font-size="10" font-weight="600" fill="#1B5E20">AudioCapture</text>
+  <text x="106" y="272" text-anchor="middle" font-size="9" fill="#5F6368">Float32 → PCM16 / 16 kHz</text>
+
+  <!-- ── ImageCapture ── -->
+  <rect x="18" y="298" width="176" height="70" rx="8"
+        fill="#FFF8E1" stroke="#F9AB00" stroke-width="1.5"/>
+  <text x="106" y="321" text-anchor="middle" font-size="18">📷</text>
+  <text x="106" y="341" text-anchor="middle" font-size="10" font-weight="600" fill="#7B4E00">ImageCapture</text>
+  <text x="106" y="355" text-anchor="middle" font-size="9" fill="#5F6368">JPEG → Base64 + intent</text>
+
+  <!-- ══════════════════════════════ GCP PROJECT BOUNDARY ══ -->
+  <rect x="204" y="60" width="1183" height="695" rx="10"
+        fill="#F8F9FA" stroke="#DADCE0" stroke-width="1.5" stroke-dasharray="8,4"/>
+  <text x="216" y="76" font-size="10" font-weight="500" fill="#5F6368">Google Cloud Project</text>
+  <!-- GCP badge -->
+  <rect x="1298" y="62" width="80" height="18" rx="4" fill="#4285F4"/>
+  <text x="1338" y="75" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Google Cloud</text>
+
+  <!-- ══════════════════════════════ CLOUD RUN BOUNDARY ══ -->
+  <rect x="219" y="77" width="618" height="650" rx="8"
+        fill="#E3F2FD" stroke="#1A73E8" stroke-width="1.5"/>
+  <!-- Cloud Run badge -->
+  <rect x="229" y="79" width="115" height="19" rx="4" fill="#1A73E8"/>
+  <text x="286" y="92" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Cloud Run Service</text>
+
+  <!-- ── FastAPI box ── -->
+  <rect x="234" y="106" width="242" height="105" rx="6"
+        fill="#FFFFFF" stroke="#DADCE0" stroke-width="1"/>
+  <rect x="234" y="106" width="242" height="22" rx="6" fill="#1A73E8"/>
+  <rect x="234" y="117" width="242" height="11" fill="#1A73E8"/>
+  <text x="355" y="121" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">FastAPI Server</text>
+  <text x="250" y="143" font-size="9" fill="#5F6368">POST</text>
+  <text x="283" y="143" font-size="9" fill="#202124" font-weight="500">/api/auth/login</text>
+  <text x="250" y="158" font-size="9" fill="#5F6368">WS</text>
+  <text x="283" y="158" font-size="9" fill="#202124" font-weight="500">/ws/{user_id}/{session_id}</text>
+  <text x="250" y="173" font-size="9" fill="#5F6368">GET</text>
+  <text x="283" y="173" font-size="9" fill="#202124" font-weight="500">/* (static frontend)</text>
+  <text x="250" y="188" font-size="9" fill="#5F6368">CORS · lifespan · uvicorn</text>
+  <text x="250" y="201" font-size="9" fill="#5F6368">InMemorySessionService</text>
+
+  <!-- ── ADK Runner box ── -->
+  <rect x="490" y="106" width="340" height="105" rx="6"
+        fill="#FFFFFF" stroke="#DADCE0" stroke-width="1"/>
+  <rect x="490" y="106" width="340" height="22" rx="6" fill="#1A73E8"/>
+  <rect x="490" y="117" width="340" height="11" fill="#1A73E8"/>
+  <text x="660" y="121" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Google ADK Runner</text>
+  <!-- LiveRequestQueue sub-box -->
+  <rect x="500" y="130" width="153" height="70" rx="4" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1"/>
+  <text x="576" y="144" text-anchor="middle" font-size="8" font-weight="700" fill="#1A73E8">LiveRequestQueue</text>
+  <text x="576" y="157" text-anchor="middle" font-size="8" fill="#5F6368">send_realtime() ← audio</text>
+  <text x="576" y="169" text-anchor="middle" font-size="8" fill="#5F6368">send_content() ← image</text>
+  <text x="576" y="181" text-anchor="middle" font-size="8" fill="#5F6368">send_content() ← [start]</text>
+  <text x="576" y="193" text-anchor="middle" font-size="8" fill="#5F6368">close() on disconnect</text>
+  <!-- RunConfig sub-box -->
+  <rect x="665" y="130" width="153" height="70" rx="4" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1"/>
+  <text x="741" y="144" text-anchor="middle" font-size="8" font-weight="700" fill="#1A73E8">RunConfig</text>
+  <text x="741" y="157" text-anchor="middle" font-size="8" fill="#5F6368">BIDI streaming</text>
+  <text x="741" y="169" text-anchor="middle" font-size="8" fill="#5F6368">AUDIO response</text>
+  <text x="741" y="181" text-anchor="middle" font-size="8" fill="#5F6368">Voice: Kore</text>
+  <text x="741" y="193" text-anchor="middle" font-size="8" fill="#5F6368">EventsCompaction</text>
+
+  <!-- ── Multi-Agent boundary ── -->
+  <rect x="234" y="224" width="596" height="380" rx="6"
+        fill="#EDE7F6" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="246" y="240" font-size="9" font-weight="700" fill="#3949AB">Multi-Agent System · Google ADK</text>
+
+  <!-- ── Orchestrator ── -->
+  <rect x="344" y="250" width="340" height="112" rx="6"
+        fill="#FFFFFF" stroke="#3949AB" stroke-width="1.5"/>
+  <rect x="344" y="250" width="340" height="21" rx="6" fill="#3949AB"/>
+  <rect x="344" y="261" width="340" height="10" fill="#3949AB"/>
+  <text x="514" y="264" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">nova_orchestrator</text>
+  <text x="514" y="285" text-anchor="middle" font-size="20">🎙</text>
+  <text x="514" y="306" text-anchor="middle" font-size="9" font-weight="600" fill="#3949AB">gemini-live-2.5-flash-native-audio</text>
+  <text x="514" y="320" text-anchor="middle" font-size="8.5" fill="#5F6368">Owns audio pipeline · Greets · Routes requests</text>
+  <text x="514" y="334" text-anchor="middle" font-size="8.5" fill="#5F6368">Out-of-scope guard · [session_start] handler</text>
+
+  <!-- ── AccountInfo Agent ── -->
+  <rect x="244" y="382" width="270" height="120" rx="6"
+        fill="#FFFFFF" stroke="#0F9D58" stroke-width="1.5"/>
+  <rect x="244" y="382" width="270" height="21" rx="6" fill="#0F9D58"/>
+  <rect x="244" y="393" width="270" height="10" fill="#0F9D58"/>
+  <text x="379" y="396" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">account_info_agent</text>
+  <text x="379" y="418" text-anchor="middle" font-size="20">💳</text>
+  <text x="379" y="438" text-anchor="middle" font-size="9" font-weight="600" fill="#0F9D58">gemini-live-2.5-flash-native-audio</text>
+  <text x="379" y="452" text-anchor="middle" font-size="8.5" fill="#5F6368">get_account_balance()</text>
+  <text x="379" y="465" text-anchor="middle" font-size="8.5" fill="#5F6368">get_transactions(category, year)</text>
+  <text x="379" y="479" text-anchor="middle" font-size="8.5" fill="#5F6368">Spending analysis · Balance lookup</text>
+  <text x="379" y="493" text-anchor="middle" font-size="8.5" fill="#5F6368">Proactive insights</text>
+
+  <!-- ── Payments Agent ── -->
+  <rect x="528" y="382" width="290" height="120" rx="6"
+        fill="#FFFFFF" stroke="#E37400" stroke-width="1.5"/>
+  <rect x="528" y="382" width="290" height="21" rx="6" fill="#E37400"/>
+  <rect x="528" y="393" width="290" height="10" fill="#E37400"/>
+  <text x="673" y="396" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">payments_agent</text>
+  <text x="673" y="418" text-anchor="middle" font-size="20">💸</text>
+  <text x="673" y="438" text-anchor="middle" font-size="9" font-weight="600" fill="#E37400">gemini-live-2.5-flash-native-audio</text>
+  <text x="673" y="452" text-anchor="middle" font-size="8.5" fill="#5F6368">find_contact() · make_transfer()</text>
+  <text x="673" y="465" text-anchor="middle" font-size="8.5" fill="#5F6368">process_qr_payment()</text>
+  <text x="673" y="479" text-anchor="middle" font-size="8.5" fill="#5F6368">QR vision decode (SEPA EPC)</text>
+  <text x="673" y="493" text-anchor="middle" font-size="8.5" fill="#5F6368">Explicit confirmation before transfer</text>
+
+  <!-- ── Session State ── -->
+  <rect x="244" y="516" width="574" height="46" rx="5"
+        fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1"/>
+  <text x="531" y="534" text-anchor="middle" font-size="8.5" font-weight="700" fill="#7B1FA2">Session State · InMemorySessionService</text>
+  <text x="531" y="549" text-anchor="middle" font-size="8" fill="#5F6368">customer_name · account_id · account_number · balance · EventsCompactionConfig</text>
+
+  <!-- ── App / Runner Info ── -->
+  <rect x="244" y="572" width="574" height="22" rx="5"
+        fill="#E8F0FE" stroke="#1A73E8" stroke-width="1"/>
+  <text x="531" y="587" text-anchor="middle" font-size="8.5" fill="#1A73E8" font-weight="600">ADK App · EventsCompactionConfig(interval=20, overlap=3) — no 10-min session limit</text>
+
+  <!-- ══════════════════════════════════ VERTEX AI ══ -->
+  <rect x="853" y="77" width="530" height="278" rx="8"
+        fill="#F3E8FF" stroke="#7C4DFF" stroke-width="1.5"/>
+  <rect x="863" y="79" width="80" height="19" rx="4" fill="#7C4DFF"/>
+  <text x="903" y="92" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Vertex AI</text>
+
+  <!-- Gemini model box -->
+  <rect x="867" y="106" width="506" height="236" rx="6"
+        fill="#FFFFFF" stroke="#7C4DFF" stroke-width="1"/>
+  <rect x="867" y="106" width="506" height="21" rx="6" fill="#7C4DFF"/>
+  <rect x="867" y="117" width="506" height="10" fill="#7C4DFF"/>
+  <text x="1120" y="120" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Gemini Live 2.5 Flash Native Audio</text>
+
+  <text x="1120" y="146" text-anchor="middle" font-size="28">✨</text>
+
+  <!-- Feature pills -->
+  <rect x="878" y="168" width="122" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="939" y="181" text-anchor="middle" font-size="8.5" fill="#4527A0">🎤 Native Audio I/O</text>
+  <rect x="1010" y="168" width="118" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="1069" y="181" text-anchor="middle" font-size="8.5" fill="#4527A0">🔊 Voice: Kore</text>
+  <rect x="1138" y="168" width="122" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="1199" y="181" text-anchor="middle" font-size="8.5" fill="#4527A0">🖼 Multimodal Vision</text>
+  <rect x="878" y="196" width="130" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="943" y="209" text-anchor="middle" font-size="8.5" fill="#4527A0">🛑 Barge-in / VAD</text>
+  <rect x="1018" y="196" width="130" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="1083" y="209" text-anchor="middle" font-size="8.5" fill="#4527A0">📝 Audio Transcription</text>
+  <rect x="1158" y="196" width="106" height="20" rx="10" fill="#EDE7F6"/>
+  <text x="1211" y="209" text-anchor="middle" font-size="8.5" fill="#4527A0">🤖 Multi-agent</text>
+
+  <line x1="878" y1="224" x2="1362" y2="224" stroke="#E8D5FF" stroke-width="1"/>
+
+  <text x="878" y="241" font-size="8.5" fill="#5F6368">Sub-agent delegation</text>
+  <text x="878" y="256" font-size="8.5" fill="#202124">ADK transcribes audio → routes to sub-agents as text context</text>
+  <text x="878" y="271" font-size="8.5" fill="#202124">Root model synthesises all speech · sub-agents call Firestore tools</text>
+  <text x="878" y="286" font-size="8.5" fill="#5F6368">Billing</text>
+  <text x="878" y="301" font-size="8.5" fill="#202124">us-central1 · Vertex AI endpoint · GOOGLE_GENAI_USE_VERTEXAI=TRUE</text>
+  <text x="878" y="316" font-size="8.5" fill="#202124">gRPC streaming over HTTPS · RunConfig BIDI mode</text>
+  <text x="878" y="331" font-size="8.5" fill="#5F6368">Context window</text>
+
+  <!-- ══════════════════════════════════ FIRESTORE ══ -->
+  <rect x="853" y="368" width="530" height="248" rx="8"
+        fill="#FFF3E0" stroke="#F57C00" stroke-width="1.5"/>
+  <rect x="863" y="370" width="80" height="19" rx="4" fill="#F57C00"/>
+  <text x="903" y="383" text-anchor="middle" font-size="9" fill="#FFFFFF" font-weight="700">Firestore</text>
+
+  <!-- accounts collection -->
+  <rect x="866" y="395" width="158" height="208" rx="5"
+        fill="#FFFFFF" stroke="#F57C00" stroke-width="1"/>
+  <rect x="866" y="395" width="158" height="19" rx="5" fill="#F57C00"/>
+  <rect x="866" y="406" width="158" height="8" fill="#F57C00"/>
+  <text x="945" y="408" text-anchor="middle" font-size="8.5" fill="#FFFFFF" font-weight="700">accounts</text>
+  <text x="945" y="428" text-anchor="middle" font-size="9">🏦</text>
+  <text x="945" y="444" text-anchor="middle" font-size="8" fill="#5F6368">acc_demo_01</text>
+  <text x="945" y="456" text-anchor="middle" font-size="8" fill="#202124" font-weight="500">Sophie van den Berg</text>
+  <text x="945" y="468" text-anchor="middle" font-size="8" fill="#1B5E20">€ 2,847.50</text>
+  <line x1="876" y1="475" x2="1014" y2="475" stroke="#DADCE0" stroke-width="1"/>
+  <text x="945" y="487" text-anchor="middle" font-size="8" fill="#5F6368">acc_demo_02</text>
+  <text x="945" y="499" text-anchor="middle" font-size="8" fill="#202124" font-weight="500">Liam de Vries</text>
+  <text x="945" y="511" text-anchor="middle" font-size="8" fill="#1B5E20">€ 5,120.00</text>
+  <line x1="876" y1="518" x2="1014" y2="518" stroke="#DADCE0" stroke-width="1"/>
+  <text x="945" y="530" text-anchor="middle" font-size="8" fill="#5F6368">name · iban · balance</text>
+  <text x="945" y="542" text-anchor="middle" font-size="8" fill="#5F6368">currency · account_type</text>
+  <text x="945" y="556" text-anchor="middle" font-size="8" fill="#5F6368">user_id</text>
+  <text x="945" y="570" text-anchor="middle" font-size="8" fill="#5F6368">europe-west4</text>
+  <text x="945" y="584" text-anchor="middle" font-size="8" fill="#5F6368">native mode</text>
+
+  <!-- transactions collection -->
+  <rect x="1034" y="395" width="158" height="208" rx="5"
+        fill="#FFFFFF" stroke="#F57C00" stroke-width="1"/>
+  <rect x="1034" y="395" width="158" height="19" rx="5" fill="#F57C00"/>
+  <rect x="1034" y="406" width="158" height="8" fill="#F57C00"/>
+  <text x="1113" y="408" text-anchor="middle" font-size="8.5" fill="#FFFFFF" font-weight="700">transactions</text>
+  <text x="1113" y="428" text-anchor="middle" font-size="9">📊</text>
+  <text x="1113" y="444" text-anchor="middle" font-size="8" fill="#5F6368">account_id · date</text>
+  <text x="1113" y="456" text-anchor="middle" font-size="8" fill="#5F6368">amount · merchant</text>
+  <text x="1113" y="468" text-anchor="middle" font-size="8" fill="#5F6368">category · reference</text>
+  <line x1="1044" y1="475" x2="1182" y2="475" stroke="#DADCE0" stroke-width="1"/>
+  <text x="1113" y="490" text-anchor="middle" font-size="8" fill="#202124">☕ coffee</text>
+  <text x="1113" y="503" text-anchor="middle" font-size="8" fill="#202124">🛒 groceries</text>
+  <text x="1113" y="516" text-anchor="middle" font-size="8" fill="#202124">🚆 transport</text>
+  <text x="1113" y="529" text-anchor="middle" font-size="8" fill="#202124">⚡ utilities</text>
+  <text x="1113" y="542" text-anchor="middle" font-size="8" fill="#202124">🍽 dining</text>
+  <text x="1113" y="555" text-anchor="middle" font-size="8" fill="#202124">💼 income</text>
+  <text x="1113" y="568" text-anchor="middle" font-size="8" fill="#202124">💸 transfer / bills</text>
+  <line x1="1044" y1="574" x2="1182" y2="574" stroke="#DADCE0" stroke-width="1"/>
+  <text x="1113" y="587" text-anchor="middle" font-size="8" fill="#5F6368">50+ mock records</text>
+
+  <!-- contacts collection -->
+  <rect x="1202" y="395" width="172" height="208" rx="5"
+        fill="#FFFFFF" stroke="#F57C00" stroke-width="1"/>
+  <rect x="1202" y="395" width="172" height="19" rx="5" fill="#F57C00"/>
+  <rect x="1202" y="406" width="172" height="8" fill="#F57C00"/>
+  <text x="1288" y="408" text-anchor="middle" font-size="8.5" fill="#FFFFFF" font-weight="700">contacts</text>
+  <text x="1288" y="428" text-anchor="middle" font-size="9">👥</text>
+  <text x="1288" y="444" text-anchor="middle" font-size="8" fill="#5F6368">account_id · name</text>
+  <text x="1288" y="456" text-anchor="middle" font-size="8" fill="#5F6368">iban · bank</text>
+  <line x1="1212" y1="463" x2="1364" y2="463" stroke="#DADCE0" stroke-width="1"/>
+  <text x="1288" y="478" text-anchor="middle" font-size="8" fill="#202124">David → ING</text>
+  <text x="1288" y="491" text-anchor="middle" font-size="8" fill="#202124">Emma → Rabobank</text>
+  <text x="1288" y="504" text-anchor="middle" font-size="8" fill="#202124">Thomas → ABN AMRO</text>
+  <line x1="1212" y1="511" x2="1364" y2="511" stroke="#DADCE0" stroke-width="1"/>
+  <text x="1288" y="526" text-anchor="middle" font-size="8" fill="#202124">Sophie → ABN AMRO</text>
+  <line x1="1212" y1="533" x2="1364" y2="533" stroke="#DADCE0" stroke-width="1"/>
+  <text x="1288" y="548" text-anchor="middle" font-size="8" fill="#5F6368">Used by find_contact()</text>
+  <text x="1288" y="561" text-anchor="middle" font-size="8" fill="#5F6368">for transfer flow</text>
+
+  <!-- ══════════════════════════════ CROSS-CUTTING ══ -->
+  <rect x="853" y="628" width="530" height="112" rx="8"
+        fill="#F1F8E9" stroke="#558B2F" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="864" y="643" font-size="9" font-weight="700" fill="#33691E">Cross-cutting concerns</text>
+
+  <!-- Cloud IAM -->
+  <rect x="862" y="649" width="154" height="82" rx="5"
+        fill="#FFFFFF" stroke="#558B2F" stroke-width="1"/>
+  <text x="939" y="672" text-anchor="middle" font-size="20">🔐</text>
+  <text x="939" y="692" text-anchor="middle" font-size="9" font-weight="600" fill="#202124">Cloud IAM</text>
+  <text x="939" y="705" text-anchor="middle" font-size="8" fill="#5F6368">Service account</text>
+  <text x="939" y="717" text-anchor="middle" font-size="8" fill="#5F6368">Vertex AI + Firestore roles</text>
+  <text x="939" y="729" text-anchor="middle" font-size="8" fill="#5F6368">Workload Identity</text>
+
+  <!-- Cloud Logging -->
+  <rect x="1025" y="649" width="154" height="82" rx="5"
+        fill="#FFFFFF" stroke="#558B2F" stroke-width="1"/>
+  <text x="1102" y="672" text-anchor="middle" font-size="20">📋</text>
+  <text x="1102" y="692" text-anchor="middle" font-size="9" font-weight="600" fill="#202124">Cloud Logging</text>
+  <text x="1102" y="705" text-anchor="middle" font-size="8" fill="#5F6368">Structured JSON logs</text>
+  <text x="1102" y="717" text-anchor="middle" font-size="8" fill="#5F6368">[EVENT] [TRANSCRIPT_IN]</text>
+  <text x="1102" y="729" text-anchor="middle" font-size="8" fill="#5F6368">[SESSION] [TOOL_CALL]</text>
+
+  <!-- Cloud Build + Artifact Registry -->
+  <rect x="1188" y="649" width="186" height="82" rx="5"
+        fill="#FFFFFF" stroke="#558B2F" stroke-width="1"/>
+  <text x="1281" y="672" text-anchor="middle" font-size="20">⚙️</text>
+  <text x="1281" y="692" text-anchor="middle" font-size="9" font-weight="600" fill="#202124">Cloud Build</text>
+  <text x="1281" y="705" text-anchor="middle" font-size="8" fill="#5F6368">cloudbuild.yaml · Dockerfile</text>
+  <text x="1281" y="717" text-anchor="middle" font-size="8" fill="#5F6368">Artifact Registry (Docker)</text>
+  <text x="1281" y="729" text-anchor="middle" font-size="8" fill="#5F6368">push-to-main → auto-deploy</text>
+
+  <!-- ═══════════════════════════════════════════ ARROWS ══ -->
+
+  <!-- 1. Browser ↔ Cloud Run (FastAPI) — bidirectional WSS+HTTPS -->
+  <line x1="194" y1="155" x2="234" y2="155"
+        stroke="#1A73E8" stroke-width="2"
+        marker-end="url(#arr-blue)" marker-start="url(#arr-start)"/>
+  <!-- label above -->
+  <rect x="196" y="130" width="36" height="13" rx="3" fill="#E8F0FE"/>
+  <text x="214" y="140" text-anchor="middle" font-size="7.5" fill="#1A73E8" font-weight="600">WSS</text>
+  <!-- label below -->
+  <rect x="194" y="158" width="38" height="13" rx="3" fill="#E8F0FE"/>
+  <text x="213" y="168" text-anchor="middle" font-size="7.5" fill="#1A73E8">HTTPS</text>
+
+  <!-- Side labels for arrow -->
+  <text x="106" y="148" text-anchor="middle" font-size="8" fill="#5F6368">PCM16 audio</text>
+  <text x="106" y="160" text-anchor="middle" font-size="8" fill="#5F6368">JPEG + intent</text>
+  <text x="106" y="172" text-anchor="middle" font-size="8" fill="#5F6368">audio + transcripts</text>
+
+  <!-- 2. FastAPI ↔ ADK Runner (internal) -->
+  <line x1="476" y1="158" x2="490" y2="158"
+        stroke="#5F6368" stroke-width="1.5"
+        marker-end="url(#arr)" marker-start="url(#arr-start-gray)"/>
+  <text x="483" y="152" text-anchor="middle" font-size="7.5" fill="#5F6368">async</text>
+
+  <!-- 3. ADK Runner ↔ Vertex AI — bidirectional gRPC -->
+  <line x1="830" y1="155" x2="853" y2="155"
+        stroke="#7C4DFF" stroke-width="2"
+        marker-end="url(#arr-purple)" marker-start="url(#arr-start)"/>
+  <rect x="832" y="137" width="20" height="13" rx="3" fill="#EDE7F6"/>
+  <text x="842" y="147" text-anchor="middle" font-size="7" fill="#7C4DFF" font-weight="600">gRPC</text>
+  <text x="842" y="165" text-anchor="middle" font-size="7" fill="#7C4DFF">Live API</text>
+
+  <!-- 4. ADK Runner → Orchestrator (vertical, events) -->
+  <line x1="600" y1="211" x2="514" y2="250"
+        stroke="#3949AB" stroke-width="1.5"
+        marker-end="url(#arr-blue)"/>
+  <text x="565" y="231" text-anchor="middle" font-size="8" fill="#3949AB">events</text>
+
+  <!-- 5. Orchestrator → AccountInfo (delegate) -->
+  <line x1="430" y1="362" x2="390" y2="382"
+        stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,2"
+        marker-end="url(#arr-blue)"/>
+  <text x="395" y="373" text-anchor="middle" font-size="7.5" fill="#3949AB">delegate</text>
+
+  <!-- 6. Orchestrator → Payments (delegate) -->
+  <line x1="596" y1="362" x2="640" y2="382"
+        stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,2"
+        marker-end="url(#arr-blue)"/>
+  <text x="635" y="373" text-anchor="middle" font-size="7.5" fill="#3949AB">delegate</text>
+
+  <!-- 7. AccountInfo → Firestore -->
+  <path d="M514,442 C690,442 740,442 853,442"
+        stroke="#F57C00" stroke-width="1.5" fill="none"
+        marker-end="url(#arr-orange)" stroke-dasharray="4,2"/>
+  <rect x="670" y="432" width="72" height="13" rx="3" fill="#FFF3E0"/>
+  <text x="706" y="442" text-anchor="middle" font-size="7.5" fill="#F57C00" font-weight="600">Firestore SDK</text>
+
+  <!-- 8. Payments → Firestore -->
+  <path d="M818,460 C836,460 844,460 853,460"
+        stroke="#F57C00" stroke-width="1.5" fill="none"
+        marker-end="url(#arr-orange)" stroke-dasharray="4,2"/>
+
+  <!-- 9. Cloud Build → Cloud Run (deploy, upward) -->
+  <path d="M1281,649 L1281,610 L838,610 L838,580"
+        stroke="#558B2F" stroke-width="1.5" fill="none"
+        marker-end="url(#arr)" stroke-dasharray="4,2"/>
+  <rect x="1025" y="600" width="44" height="13" rx="3" fill="#F1F8E9"/>
+  <text x="1047" y="610" text-anchor="middle" font-size="7.5" fill="#558B2F" font-weight="600">deploy</text>
+
+  <!-- 10. Cloud IAM → Cloud Run (auth) -->
+  <path d="M939,649 L939,620 L219,620 L219,500"
+        stroke="#558B2F" stroke-width="1" fill="none"
+        stroke-dasharray="3,3" opacity="0.6"/>
+  <text x="580" y="616" text-anchor="middle" font-size="7.5" fill="#558B2F">auth</text>
+
+  <!-- 11. Cloud Logging ← Cloud Run -->
+  <path d="M838,560 L845,560 L845,620 L1025,620 L1025,649"
+        stroke="#558B2F" stroke-width="1" fill="none"
+        stroke-dasharray="3,3" opacity="0.6" marker-end="url(#arr)"/>
+  <text x="934" y="616" text-anchor="middle" font-size="7.5" fill="#558B2F">logs</text>
+
+  <!-- ═══════════════════════════════════════ LEGEND ══ -->
+  <rect x="18" y="408" width="176" height="328" rx="8"
+        fill="#F8F9FA" stroke="#DADCE0" stroke-width="1"/>
+  <text x="106" y="425" text-anchor="middle" font-size="9" font-weight="700" fill="#202124">Legend</text>
+  <line x1="28" y1="430" x2="184" y2="430" stroke="#DADCE0" stroke-width="1"/>
+
+  <!-- WSS -->
+  <line x1="30" y1="445" x2="70" y2="445" stroke="#1A73E8" stroke-width="2"
+        marker-end="url(#arr-blue)" marker-start="url(#arr-start)"/>
+  <text x="78" y="449" font-size="8.5" fill="#5F6368">WebSocket (WSS)</text>
+
+  <!-- gRPC -->
+  <line x1="30" y1="465" x2="70" y2="465" stroke="#7C4DFF" stroke-width="2"
+        marker-end="url(#arr-purple)" marker-start="url(#arr-start)"/>
+  <text x="78" y="469" font-size="8.5" fill="#5F6368">gRPC / Live API</text>
+
+  <!-- Firestore -->
+  <line x1="30" y1="485" x2="70" y2="485" stroke="#F57C00" stroke-width="1.5"
+        stroke-dasharray="4,2" marker-end="url(#arr-orange)"/>
+  <text x="78" y="489" font-size="8.5" fill="#5F6368">Firestore SDK</text>
+
+  <!-- Delegate -->
+  <line x1="30" y1="505" x2="70" y2="505" stroke="#3949AB" stroke-width="1.5"
+        stroke-dasharray="4,2" marker-end="url(#arr-blue)"/>
+  <text x="78" y="509" font-size="8.5" fill="#5F6368">ADK delegation</text>
+
+  <!-- Deploy/Auth -->
+  <line x1="30" y1="525" x2="70" y2="525" stroke="#558B2F" stroke-width="1.5"
+        stroke-dasharray="3,3"/>
+  <text x="78" y="529" font-size="8.5" fill="#5F6368">deploy / auth / logs</text>
+
+  <line x1="28" y1="540" x2="184" y2="540" stroke="#DADCE0" stroke-width="1"/>
+  <text x="106" y="556" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Demo Credentials</text>
+  <text x="106" y="572" text-anchor="middle" font-size="8" fill="#5F6368">sophie / nova1234</text>
+  <text x="106" y="584" text-anchor="middle" font-size="8" fill="#202124">Sophie van den Berg</text>
+  <text x="106" y="600" text-anchor="middle" font-size="8" fill="#5F6368">liam / nova1234</text>
+  <text x="106" y="612" text-anchor="middle" font-size="8" fill="#202124">Liam de Vries</text>
+
+  <line x1="28" y1="620" x2="184" y2="620" stroke="#DADCE0" stroke-width="1"/>
+  <text x="106" y="636" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Region</text>
+  <text x="106" y="650" text-anchor="middle" font-size="8" fill="#5F6368">Cloud Run: europe-west4</text>
+  <text x="106" y="664" text-anchor="middle" font-size="8" fill="#5F6368">Vertex AI: us-central1</text>
+
+  <line x1="28" y1="671" x2="184" y2="671" stroke="#DADCE0" stroke-width="1"/>
+  <text x="106" y="686" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Model</text>
+  <text x="106" y="700" text-anchor="middle" font-size="8" fill="#5F6368">gemini-live-2.5-</text>
+  <text x="106" y="713" text-anchor="middle" font-size="8" fill="#5F6368">flash-native-audio</text>
+  <text x="106" y="726" text-anchor="middle" font-size="8" fill="#5F6368">(all 3 agents)</text>
+
+</svg>
