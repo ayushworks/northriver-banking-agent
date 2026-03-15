@@ -1,0 +1,44 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --nova-blue: #003D7A;
+  --nova-blue-light: #0057B0;
+  --nova-accent: #00B4D8;
+  --bg: #F0F4FA;
+  --surface: #FFFFFF;
+  --surface-2: #F7F9FC;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5A6478;
+  --text-muted: #9AA5B4;
+  --border: #E2E8F0;
+  --success: #22C55E;
+  --error: #EF4444;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+input, select {
+  font-family: inherit;
+}
