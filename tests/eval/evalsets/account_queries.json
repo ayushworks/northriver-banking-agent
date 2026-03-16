@@ -1,0 +1,100 @@
+{
+  "eval_set_id": "account_queries",
+  "name": "Account Information — Balance & Spending Queries",
+  "description": "Validates that River correctly retrieves balance and transaction data and presents it conversationally.",
+  "eval_cases": [
+    {
+      "eval_id": "balance_query",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "What's my current balance?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "Your current balance is" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "get_account_balance", "args": {} }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "banking_agent",
+        "user_id": "eval_user_01",
+        "state": {
+          "customer_name": "Sophie van den Berg",
+          "account_id": "acc_demo_01",
+          "account_number": "NL91ABNA0417164300",
+          "balance": 2847.50,
+          "session_id": ""
+        }
+      }
+    },
+    {
+      "eval_id": "spending_coffee_2025",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "How much did I spend on coffee last year?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "coffee" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "get_transactions", "args": { "category": "coffee", "year": 2025 } }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "banking_agent",
+        "user_id": "eval_user_01",
+        "state": {
+          "customer_name": "Sophie van den Berg",
+          "account_id": "acc_demo_01",
+          "account_number": "NL91ABNA0417164300",
+          "balance": 2847.50,
+          "session_id": ""
+        }
+      }
+    },
+    {
+      "eval_id": "spending_groceries_2025",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "How much have I spent on groceries this year?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "groceries" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "get_transactions", "args": { "category": "groceries", "year": 2026 } }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "banking_agent",
+        "user_id": "eval_user_01",
+        "state": {
+          "customer_name": "Sophie van den Berg",
+          "account_id": "acc_demo_01",
+          "account_number": "NL91ABNA0417164300",
+          "balance": 2847.50,
+          "session_id": ""
+        }
+      }
+    }
+  ]
+}

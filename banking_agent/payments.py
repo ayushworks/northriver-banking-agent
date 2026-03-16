@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 
 from google.adk.agents import Agent
+from google.adk.agents.callback_context import CallbackContext
 from google.adk.tools import ToolContext
 
 from .db import get_db
@@ -103,11 +104,6 @@ def make_transfer(
     db.collection("accounts").document(account_id).update({"balance": new_balance})
     tool_context.state["balance"] = new_balance
 
-    # Push the updated balance to the frontend so the balance pill refreshes.
-    session_id = tool_context.state.get("session_id")
-    if session_id:
-        emit_ui(session_id, {"type": "balance_update", "balance": new_balance})
-
     return {
         "status": "success",
         "reference": reference,
@@ -172,11 +168,6 @@ def process_qr_payment(
 
     db.collection("accounts").document(account_id).update({"balance": new_balance})
     tool_context.state["balance"] = new_balance
-
-    # Push the updated balance to the frontend so the balance pill refreshes.
-    session_id = tool_context.state.get("session_id")
-    if session_id:
-        emit_ui(session_id, {"type": "balance_update", "balance": new_balance})
 
     return {
         "status": "success",
@@ -252,6 +243,30 @@ the full flow: look up the contact, confirm with the customer, execute, confirm.
 """
 
 # ---------------------------------------------------------------------------
+# Callbacks
+# ---------------------------------------------------------------------------
+
+
+async def _after_tool_callback(
+    ctx: CallbackContext, tool_name: str, result: dict
+) -> dict | None:
+    """Push a balance_update UI event after any successful transaction.
+
+    Keeps tool functions pure (data only) — UI concerns live here, not inside
+    the tools themselves. Returns None so the tool result is passed through
+    unchanged to the model.
+    """
+    session_id = ctx.state.get("session_id")
+    if not session_id or result.get("status") != "success":
+        return None
+
+    if tool_name in ("make_transfer", "process_qr_payment"):
+        emit_ui(session_id, {"type": "balance_update", "balance": result["new_balance"]})
+
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Agent factory
 # ---------------------------------------------------------------------------
 
@@ -271,6 +286,7 @@ def create_payments_agent() -> Agent:
         ),
         instruction=PAYMENTS_PROMPT,
         tools=[find_contact, make_transfer, process_qr_payment],
+        after_tool_callback=_after_tool_callback,
         disallow_transfer_to_parent=False,
         disallow_transfer_to_peers=False,
     )

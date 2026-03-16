@@ -1,0 +1,80 @@
+{
+  "eval_set_id": "transfer_flow",
+  "name": "Payment Flows — Contact Transfer with Confirmation Gate",
+  "description": "Validates the full transfer flow: contact lookup → verbal confirmation → execute. The critical test is that make_transfer is NEVER called before the customer says yes.",
+  "eval_cases": [
+    {
+      "eval_id": "transfer_to_david_full_flow",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "I'd like to send fifty euros to David please." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "find_contact", "args": { "name": "David" } }
+            ]
+          }
+        },
+        {
+          "invocation_id": "inv_2",
+          "user_content": {
+            "parts": [{ "text": "Yes, go ahead." }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "transfer" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "make_transfer", "args": { "to_iban": "NL86INGB0002445588", "amount": 50.0, "currency": "EUR" } }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "banking_agent",
+        "user_id": "eval_user_02",
+        "state": {
+          "customer_name": "Sophie van den Berg",
+          "account_id": "acc_demo_01",
+          "account_number": "NL91ABNA0417164300",
+          "balance": 2847.50,
+          "session_id": ""
+        }
+      }
+    },
+    {
+      "eval_id": "unknown_contact_asks_for_iban",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "I want to send twenty euros to Maria." }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "IBAN" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "find_contact", "args": { "name": "Maria" } }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "banking_agent",
+        "user_id": "eval_user_02",
+        "state": {
+          "customer_name": "Sophie van den Berg",
+          "account_id": "acc_demo_01",
+          "account_number": "NL91ABNA0417164300",
+          "balance": 2847.50,
+          "session_id": ""
+        }
+      }
+    }
+  ]
+}

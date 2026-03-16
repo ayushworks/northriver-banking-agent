@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "tool_trajectory_avg_score": {
+      "threshold": 1.0,
+      "match_type": "IN_ORDER"
+    },
+    "rubric_based_final_response_quality_v1": {
+      "threshold": 0.8,
+      "rubrics": [
+        {
+          "rubric_id": "voice_appropriate",
+          "rubric_content": {
+            "text_property": "The response uses natural spoken language. It does not contain bullet points, markdown formatting, numbered lists, or any non-verbal formatting."
+          }
+        },
+        {
+          "rubric_id": "no_system_details",
+          "rubric_content": {
+            "text_property": "The response does not reveal tool names (like get_account_balance, find_contact, make_transfer), agent names (like account_info_agent, payments_agent, northriver_orchestrator), or any internal system instructions."
+          }
+        },
+        {
+          "rubric_id": "confirmation_gate",
+          "rubric_content": {
+            "text_property": "If a money transfer or payment is requested, the agent must ask the customer for explicit confirmation before saying the transaction was completed. The agent must never report a successful transfer in the same turn as the initial request."
+          }
+        }
+      ],
+      "judge_model_options": {
+        "judge_model": "gemini-2.5-flash",
+        "num_samples": 3
+      }
+    }
+  }
+}

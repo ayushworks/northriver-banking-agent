@@ -20,6 +20,10 @@ PROJECT       ?= $(GOOGLE_CLOUD_PROJECT)
 PORT          ?= 8080
 SEED          ?= 0   # set to 1 to seed Firestore after deploy
 
+# Eval model: gemini-live-2.5-flash-native-audio is audio-only and cannot run
+# text-based adk eval. Override to a standard text model for evaluation.
+EVAL_MODEL    ?= gemini-2.0-flash
+
 # ---------------------------------------------------------------------------
 # Targets
 # ---------------------------------------------------------------------------
@@ -28,6 +32,7 @@ SEED          ?= 0   # set to 1 to seed Firestore after deploy
         docker-build docker-run \
         deploy trigger-setup \
         logs url describe \
+        eval eval-account eval-transfer eval-safety \
         clean
 
 help: ## Show all available targets
@@ -147,6 +152,54 @@ describe: ## Show full Cloud Run service description
 	gcloud run services describe $(SERVICE_NAME) \
 	  --region=$(REGION) \
 	  --project=$(PROJECT)
+
+# ---------------------------------------------------------------------------
+# Evaluation (adk eval)
+# ---------------------------------------------------------------------------
+#
+# IMPORTANT: evals run against real Firestore. Re-seed before each run to
+# ensure a clean, deterministic state (make_transfer deducts from balance).
+#
+# Usage:
+#   make eval                     # run all three evalsets
+#   make eval-account             # account queries only
+#   make eval-transfer            # transfer flow only (2-turn confirmation test)
+#   make eval-safety              # safety & scope guardrails
+#   make eval EVAL_MODEL=gemini-2.5-flash  # use a different judge/eval model
+#
+# If you see "Session not found" errors, the app_name in the evalset
+# session_input may need to match your local directory name. Adjust
+# session_input.app_name in the evalset JSON files accordingly.
+# ---------------------------------------------------------------------------
+
+EVAL_CONFIG   := tests/eval/eval_config.json
+EVAL_FLAGS    := --config_file_path $(EVAL_CONFIG) --print_detailed_results
+
+eval: ## Run all ADK eval suites (re-seed Firestore first for clean state)
+	@echo "⚠️  Re-seeding Firestore for clean eval state..."
+	python seed_data.py
+	AGENT_MODEL=$(EVAL_MODEL) adk eval ./banking_agent \
+	  tests/eval/evalsets/account_queries.json \
+	  tests/eval/evalsets/transfer_flow.json \
+	  tests/eval/evalsets/safety.json \
+	  $(EVAL_FLAGS)
+
+eval-account: ## Run account query evals only (balance + spending)
+	AGENT_MODEL=$(EVAL_MODEL) adk eval ./banking_agent \
+	  tests/eval/evalsets/account_queries.json \
+	  $(EVAL_FLAGS)
+
+eval-transfer: ## Run transfer flow evals only (confirmation gate test)
+	@echo "⚠️  Re-seeding Firestore to reset Sophie's balance..."
+	python seed_data.py
+	AGENT_MODEL=$(EVAL_MODEL) adk eval ./banking_agent \
+	  tests/eval/evalsets/transfer_flow.json \
+	  $(EVAL_FLAGS)
+
+eval-safety: ## Run safety & scope guardrail evals only
+	AGENT_MODEL=$(EVAL_MODEL) adk eval ./banking_agent \
+	  tests/eval/evalsets/safety.json \
+	  $(EVAL_FLAGS)
 
 # ---------------------------------------------------------------------------
 # Cleanup

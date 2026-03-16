@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 
 from google.adk.agents import Agent
+from google.adk.agents.callback_context import CallbackContext
 from google.adk.tools import ToolContext
 
 from .db import get_db
@@ -75,7 +76,7 @@ def get_transactions(category: str, year: int, tool_context: ToolContext) -> dic
 
     transactions.sort(key=lambda x: x["date"], reverse=True)
 
-    result = {
+    return {
         "status": "success",
         "category": category,
         "year": year,
@@ -84,22 +85,6 @@ def get_transactions(category: str, year: int, tool_context: ToolContext) -> dic
         "currency": "EUR",
         "transactions": transactions[:20],
     }
-
-    # Push the transaction list to the frontend as a visual table.
-    # The agent speaks only the spoken summary; the UI renders the detail rows.
-    session_id = tool_context.state.get("session_id")
-    if session_id:
-        emit_ui(session_id, {
-            "type":         "transactions_table",
-            "transactions": result["transactions"],
-            "category":     result["category"],
-            "total_spend":  result["total_spend"],
-            "currency":     result["currency"],
-            "year":         result["year"],
-            "count":        result["count"],
-        })
-
-    return result
 
 
 # ---------------------------------------------------------------------------
@@ -142,6 +127,38 @@ transfers yourself.
 """
 
 # ---------------------------------------------------------------------------
+# Callbacks
+# ---------------------------------------------------------------------------
+
+
+async def _after_tool_callback(
+    ctx: CallbackContext, tool_name: str, result: dict
+) -> dict | None:
+    """Push structured UI events after tool execution.
+
+    Keeps tool functions pure (data only) — UI concerns live here, not inside
+    the tools themselves. Returns None so the tool result is passed through
+    unchanged to the model.
+    """
+    session_id = ctx.state.get("session_id")
+    if not session_id or result.get("status") != "success":
+        return None
+
+    if tool_name == "get_transactions":
+        emit_ui(session_id, {
+            "type":         "transactions_table",
+            "transactions": result["transactions"],
+            "category":     result["category"],
+            "total_spend":  result["total_spend"],
+            "currency":     result["currency"],
+            "year":         result["year"],
+            "count":        result["count"],
+        })
+
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Agent factory
 # ---------------------------------------------------------------------------
 
@@ -161,6 +178,7 @@ def create_account_info_agent() -> Agent:
         ),
         instruction=ACCOUNT_INFO_PROMPT,
         tools=[get_account_balance, get_transactions],
+        after_tool_callback=_after_tool_callback,
         disallow_transfer_to_parent=False,
         disallow_transfer_to_peers=False,
     )
