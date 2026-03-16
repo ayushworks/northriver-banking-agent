@@ -28,6 +28,7 @@ from google.cloud import firestore
 from google.genai import types
 
 from banking_agent.agent import root_agent
+from banking_agent import ui_events
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -174,10 +175,12 @@ async def login(body: LoginRequest):
         user_id=user_id,
         session_id=session_id,
         state={
-            "customer_name": acc_data["name"],
-            "account_id": account_id,
+            "customer_name":  acc_data["name"],
+            "account_id":     account_id,
             "account_number": acc_data["iban"],
-            "balance": acc_data["balance"],
+            "balance":        acc_data["balance"],
+            # Stored so tools can look up the ui_events queue by session_id.
+            "session_id":     session_id,
         },
     )
 
@@ -227,6 +230,11 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
         return
 
     live_request_queue = LiveRequestQueue()
+
+    # Register a UI-events queue for this session so tools (e.g. get_transactions)
+    # can push structured display data to the frontend without going through the
+    # agent's spoken response.
+    ui_queue = ui_events.register(session_id)
 
     # Trigger the agent to speak first as soon as the session opens.
     # The queue buffers this; run_live consumes it the moment the connection
@@ -376,6 +384,18 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
                     f"turn_complete={bool(event.turn_complete)}"
                 )
 
+                # ── UI events side-channel (tool → frontend) ─────────────────
+                # Drain any events that tools pushed onto the session queue.
+                # get_transactions() writes the transaction list here so the
+                # frontend can render a table without the agent speaking each row.
+                while not ui_queue.empty():
+                    ui_event = ui_queue.get_nowait()
+                    logger.info(
+                        f"[UI_EVENT] type={ui_event.get('type')} "
+                        f"count={ui_event.get('count', '—')}"
+                    )
+                    await websocket.send_text(json.dumps(ui_event))
+
                 # ── Audio output ─────────────────────────────────────────────
                 if event.content and event.content.parts:
                     for part in event.content.parts:
@@ -522,6 +542,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
     finally:
         logger.info(f"[WS] Closing connection user={user_id} session={session_id}")
         live_request_queue.close()
+        ui_events.deregister(session_id)
 
 
 # ---------------------------------------------------------------------------

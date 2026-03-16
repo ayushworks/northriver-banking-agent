@@ -36,7 +36,7 @@
 
   <!-- ══════════════════════════════════════════════════ TITLE ══ -->
   <text x="700" y="28" text-anchor="middle" font-size="19" font-weight="600"
-        fill="#202124">Nova Banking Agent — System Architecture</text>
+        fill="#202124">NorthRiver Banking Agent — System Architecture</text>
   <text x="700" y="48" text-anchor="middle" font-size="12" fill="#5F6368">
     Gemini Live · Google ADK · Cloud Run · Firestore · Cloud Build
   </text>
@@ -215,7 +215,7 @@
   <text x="878" y="256" font-size="8.5" fill="#202124">ADK transcribes audio → routes to sub-agents as text context</text>
   <text x="878" y="271" font-size="8.5" fill="#202124">Root model synthesises all speech · sub-agents call Firestore tools</text>
   <text x="878" y="286" font-size="8.5" fill="#5F6368">Billing</text>
-  <text x="878" y="301" font-size="8.5" fill="#202124">us-central1 · Vertex AI endpoint · GOOGLE_GENAI_USE_VERTEXAI=TRUE</text>
+  <text x="878" y="301" font-size="8.5" fill="#202124">europe-west4· Vertex AI endpoint · GOOGLE_GENAI_USE_VERTEXAI=TRUE</text>
   <text x="878" y="316" font-size="8.5" fill="#202124">gRPC streaming over HTTPS · RunConfig BIDI mode</text>
   <text x="878" y="331" font-size="8.5" fill="#5F6368">Context window</text>
 
@@ -430,17 +430,10 @@
         stroke-dasharray="3,3"/>
   <text x="78" y="529" font-size="8.5" fill="#5F6368">deploy / auth / logs</text>
 
-  <line x1="28" y1="540" x2="184" y2="540" stroke="#DADCE0" stroke-width="1"/>
-  <text x="106" y="556" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Demo Credentials</text>
-  <text x="106" y="572" text-anchor="middle" font-size="8" fill="#5F6368">sophie / nova1234</text>
-  <text x="106" y="584" text-anchor="middle" font-size="8" fill="#202124">Sophie van den Berg</text>
-  <text x="106" y="600" text-anchor="middle" font-size="8" fill="#5F6368">liam / nova1234</text>
-  <text x="106" y="612" text-anchor="middle" font-size="8" fill="#202124">Liam de Vries</text>
-
   <line x1="28" y1="620" x2="184" y2="620" stroke="#DADCE0" stroke-width="1"/>
   <text x="106" y="636" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Region</text>
   <text x="106" y="650" text-anchor="middle" font-size="8" fill="#5F6368">Cloud Run: europe-west4</text>
-  <text x="106" y="664" text-anchor="middle" font-size="8" fill="#5F6368">Vertex AI: us-central1</text>
+  <text x="106" y="664" text-anchor="middle" font-size="8" fill="#5F6368">Vertex AI: europe-west4</text>
 
   <line x1="28" y1="671" x2="184" y2="671" stroke="#DADCE0" stroke-width="1"/>
   <text x="106" y="686" text-anchor="middle" font-size="8.5" font-weight="700" fill="#202124">Model</text>

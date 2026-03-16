@@ -9,6 +9,7 @@ from google.adk.agents import Agent
 from google.adk.tools import ToolContext
 
 from .db import get_db
+from .ui_events import emit as emit_ui
 
 # ---------------------------------------------------------------------------
 # Tools
@@ -102,6 +103,11 @@ def make_transfer(
     db.collection("accounts").document(account_id).update({"balance": new_balance})
     tool_context.state["balance"] = new_balance
 
+    # Push the updated balance to the frontend so the balance pill refreshes.
+    session_id = tool_context.state.get("session_id")
+    if session_id:
+        emit_ui(session_id, {"type": "balance_update", "balance": new_balance})
+
     return {
         "status": "success",
         "reference": reference,
@@ -167,6 +173,11 @@ def process_qr_payment(
     db.collection("accounts").document(account_id).update({"balance": new_balance})
     tool_context.state["balance"] = new_balance
 
+    # Push the updated balance to the frontend so the balance pill refreshes.
+    session_id = tool_context.state.get("session_id")
+    if session_id:
+        emit_ui(session_id, {"type": "balance_update", "balance": new_balance})
+
     return {
         "status": "success",
         "reference": pay_reference,
@@ -226,6 +237,11 @@ the full flow: look up the contact, confirm with the customer, execute, confirm.
 
 ## Rules
 - Never execute a transfer or payment without explicit customer confirmation.
+- Confirmation MUST be a standalone "yes", "yeah", "go ahead", "confirm", or
+  equivalent spoken reply AFTER you have read back the details. A request to
+  scan or view a bill ("scan this", "what does this say", "I want to pay this")
+  is NOT confirmation — it is the start of the flow. Always read back the
+  details first, then wait for the customer's explicit "yes".
 - If balance is insufficient, say so clearly and do not proceed.
 - If a contact is not found, ask for their IBAN.
 - Never ask for account numbers — you already know the customer.

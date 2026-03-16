@@ -159,7 +159,7 @@ Or with Firestore seeding in one step:
 | Variable | Description |
 |----------|-------------|
 | `GOOGLE_CLOUD_PROJECT` | GCP project ID |
-| `GOOGLE_CLOUD_LOCATION` | Vertex AI region (e.g. `us-central1`) |
+| `GOOGLE_CLOUD_LOCATION` | Vertex AI region (e.g. `europe-west4`) |
 | `GOOGLE_GENAI_USE_VERTEXAI` | Set to `TRUE` for Vertex AI |
 | `AGENT_MODEL` | Gemini model alias (default: `gemini-live-2.5-flash-native-audio`) |
 | `FIRESTORE_PROJECT` | Firestore project ID (defaults to `GOOGLE_CLOUD_PROJECT`) |
@@ -178,6 +178,166 @@ northriver_orchestrator  (River — greets & routes)
 ```
 
 The orchestrator routes silently — customers never know sub-agents exist. Each sub-agent has access to a scoped set of Firestore tools and a tightly focused system prompt.
+
+---
+
+## Reproducible Testing (For Judges)
+
+Everything needed to run a full end-to-end demo is included in this repository. Follow these steps exactly to reproduce all three demo flows.
+
+### Prerequisites
+
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| Python | 3.11+ | `python --version` |
+| Node.js | 20+ | `node --version` |
+| Google Cloud project | — | Vertex AI & Firestore APIs enabled |
+| `gcloud` CLI | latest | Authenticated via `gcloud auth application-default login` |
+| Browser | Chrome / Edge | Required for Web Audio API + AudioWorklet support |
+| Microphone | any | Grant permission when prompted |
+
+---
+
+### Step 1 — Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/northriver-banking-agent.git
+cd northriver-banking-agent
+```
+
+---
+
+### Step 2 — Configure environment
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and fill in your values:
+
+```env
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GOOGLE_CLOUD_PROJECT=your-gcp-project-id
+GOOGLE_CLOUD_LOCATION=europe-west4
+AGENT_MODEL=gemini-live-2.5-flash-native-audio
+FIRESTORE_PROJECT=your-gcp-project-id
+DEMO_CREDENTIALS=sophie:nova1234:acc_demo_01:user_demo_01,liam:nova1234:acc_demo_02:user_demo_02
+```
+
+> **Note:** `GOOGLE_CLOUD_LOCATION` must be a region that supports Gemini Live on Vertex AI (`us-central1` or `europe-west4`).
+
+---
+
+### Step 3 — Enable GCP APIs
+
+```bash
+gcloud services enable \
+  aiplatform.googleapis.com \
+  firestore.googleapis.com \
+  --project=YOUR_GCP_PROJECT
+```
+
+---
+
+### Step 4 — Install dependencies
+
+```bash
+# Python backend
+pip install -r requirements.txt
+
+# React frontend
+cd frontend && npm install && cd ..
+```
+
+---
+
+### Step 5 — Seed Firestore with demo data
+
+```bash
+python seed_data.py
+```
+
+This creates:
+- **Sophie van den Berg** — demo account `acc_demo_01`, balance €2,847.50, IBAN `NL91ABNA0417164300`
+- **David** — saved contact, IBAN `NL86INGB0002445588` (ING)
+- **Transaction history** — coffee, groceries, dining, utilities entries for 2025
+- **`assets/vattenfall_bill_qr.png`** — Vattenfall energy bill with a SEPA EPC QR code (€94.20, ref `INV-2026-03-8821`)
+
+> ⚠️ Run this once per GCP project. Re-running is safe — it overwrites existing demo documents.
+
+---
+
+### Step 6 — Start the application
+
+**Terminal 1 — Backend**
+```bash
+uvicorn main:app --port 8080
+```
+
+**Terminal 2 — Frontend**
+```bash
+cd frontend && npm run dev
+```
+
+Open **[http://localhost:5173](http://localhost:5173)** in Chrome or Edge.
+
+---
+
+### Step 7 — Sign in
+
+| Field | Value |
+|-------|-------|
+| Username | `sophie` |
+| Password | `nova1234` |
+
+Click **Sign In & Start Session**. Grant microphone access when prompted. River will greet Sophie automatically within 2–3 seconds.
+
+---
+
+### Step 8 — Reproduce the three demo flows
+
+#### ✅ Flow 1 — Spending Query
+1. Wait for River's greeting to finish
+2. Say: **"How much did I spend on coffee last year?"**
+3. ✔ River speaks the total spend
+4. ✔ A transaction table appears in the UI listing all coffee transactions
+
+#### ✅ Flow 2 — Contact Transfer
+1. Say: **"Send ten euros to David"**
+2. River reads back David's IBAN (last 4 digits), the amount, and source account
+3. Say: **"Yes"**
+4. ✔ River confirms with a reference number
+5. ✔ The balance pill updates immediately to reflect the deduction
+
+#### ✅ Flow 3 — QR Bill Payment
+1. Click the **📷 Pay a Bill** button (bottom left)
+2. Upload `assets/vattenfall_bill_qr.png` (included in the repo)
+3. River reads the QR code and says: *"I can see a Vattenfall energy bill for €94.20…"*
+4. Say: **"Yes, pay it"**
+5. ✔ River confirms the payment with a reference number
+6. ✔ The balance pill updates to reflect the deduction
+
+---
+
+### Expected State After All Three Flows
+
+| Item | Starting value | After flows |
+|------|---------------|-------------|
+| Sophie's balance | €2,847.50 | €2,743.30 (−€10.00 transfer, −€94.20 QR payment) |
+| Firestore `transactions` | seeded history | 2 new entries added |
+| Firestore `accounts/acc_demo_01` balance | 2847.50 | 2743.30 |
+
+---
+
+### Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| River doesn't greet on load | Vertex AI region not supported | Change `GOOGLE_CLOUD_LOCATION` to `us-central1` |
+| `404` on model | Model alias not available in your region | Set `AGENT_MODEL=gemini-2.5-flash-native-audio-preview-12-2025` |
+| No microphone input | Browser permissions | Click the lock icon in the address bar → allow microphone |
+| Firestore permission denied | ADC not set | Run `gcloud auth application-default login` |
+| Balance doesn't update | Stale seed data | Re-run `python seed_data.py` then restart the backend |
 
 ---
 

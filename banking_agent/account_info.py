@@ -7,6 +7,7 @@ from google.adk.agents import Agent
 from google.adk.tools import ToolContext
 
 from .db import get_db
+from .ui_events import emit as emit_ui
 
 # ---------------------------------------------------------------------------
 # Tools
@@ -74,7 +75,7 @@ def get_transactions(category: str, year: int, tool_context: ToolContext) -> dic
 
     transactions.sort(key=lambda x: x["date"], reverse=True)
 
-    return {
+    result = {
         "status": "success",
         "category": category,
         "year": year,
@@ -83,6 +84,22 @@ def get_transactions(category: str, year: int, tool_context: ToolContext) -> dic
         "currency": "EUR",
         "transactions": transactions[:20],
     }
+
+    # Push the transaction list to the frontend as a visual table.
+    # The agent speaks only the spoken summary; the UI renders the detail rows.
+    session_id = tool_context.state.get("session_id")
+    if session_id:
+        emit_ui(session_id, {
+            "type":         "transactions_table",
+            "transactions": result["transactions"],
+            "category":     result["category"],
+            "total_spend":  result["total_spend"],
+            "currency":     result["currency"],
+            "year":         result["year"],
+            "count":        result["count"],
+        })
+
+    return result
 
 
 # ---------------------------------------------------------------------------

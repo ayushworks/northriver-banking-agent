@@ -4,6 +4,7 @@ import { AudioPlayer } from '../AudioPlayer.js';
 import ImageCapture from './ImageCapture.jsx';
 import MicButton from './MicButton.jsx';
 import TranscriptDisplay from './TranscriptDisplay.jsx';
+import TransactionsTable from './TransactionsTable.jsx';
 
 // Append a delta to the last message in state if it belongs to the same
 // unfinished turn, otherwise start a new bubble.  Done inside setMessages
@@ -39,6 +40,9 @@ export default function BankingInterface({ session, onLogout }) {
   const [messages, setMessages] = useState([]);
   const [toolLabel, setToolLabel] = useState('');
   const [toastTimeout, setToastTimeout] = useState(null);
+  const [transactionsData, setTransactionsData] = useState(null);
+  // Local balance — initialised from login session, updated live after payments.
+  const [balance, setBalance] = useState(session.balance);
 
   const wsRef = useRef(null);
   const captureRef = useRef(null);
@@ -106,8 +110,9 @@ export default function BankingInterface({ session, onLogout }) {
           break;
 
         case 'transcript_input':
-          // When the user starts speaking, close any open agent bubble first
-          // (guards against turn_complete arriving late or not at all).
+          // When the user starts speaking, close any open agent bubble and
+          // dismiss the transactions table so it doesn't persist across turns.
+          setTransactionsData(null);
           setMessages((prev) => {
             const withClosed = closeAgentBubble(prev);
             return appendOrCreate(withClosed, 'user', msg.text, msg.finished);
@@ -124,6 +129,23 @@ export default function BankingInterface({ session, onLogout }) {
 
         case 'tool_call':
           showToolLabel(msg.label);
+          break;
+
+        case 'balance_update':
+          // Refresh the balance pill immediately after a transfer or payment.
+          setBalance(msg.balance);
+          break;
+
+        case 'transactions_table':
+          // Render transaction list visually — agent speaks only the summary.
+          setTransactionsData({
+            transactions: msg.transactions,
+            category:     msg.category,
+            total_spend:  msg.total_spend,
+            year:         msg.year,
+            count:        msg.count,
+            currency:     msg.currency,
+          });
           break;
 
         case 'interrupted':
@@ -189,7 +211,7 @@ export default function BankingInterface({ session, onLogout }) {
           type: 'image',
           data: base64Jpeg,
           mimeType: 'image/jpeg',
-          prompt: 'I want to pay this bill.',
+          prompt: 'Please scan this bill and tell me what it says.',
         })
       );
     }
@@ -205,6 +227,12 @@ export default function BankingInterface({ session, onLogout }) {
 
   return (
     <div style={styles.page}>
+      <style>{`
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       {/* Header */}
       <header style={styles.header}>
         <div style={styles.headerLeft}>
@@ -229,7 +257,7 @@ export default function BankingInterface({ session, onLogout }) {
       <div style={styles.balancePill}>
         <span style={styles.balancePillLabel}>Balance</span>
         <span style={styles.balancePillAmount}>
-          €{session.balance.toLocaleString('nl-NL', { minimumFractionDigits: 2 })}
+          €{balance.toLocaleString('nl-NL', { minimumFractionDigits: 2 })}
         </span>
       </div>
 
@@ -243,6 +271,14 @@ export default function BankingInterface({ session, onLogout }) {
         <div style={styles.toast}>
           <span style={styles.toastSpinner}>⟳</span> {toolLabel}
         </div>
+      )}
+
+      {/* Transactions table — shown after a spending query, hidden on next user turn */}
+      {transactionsData && (
+        <TransactionsTable
+          data={transactionsData}
+          onClose={() => setTransactionsData(null)}
+        />
       )}
 
       {/* Controls */}

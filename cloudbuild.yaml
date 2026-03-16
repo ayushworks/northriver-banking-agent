@@ -112,7 +112,7 @@ substitutions:
   _SERVICE: northriver-banking-agent
   _REGION: europe-west4
   _REPO: northriver-banking
-  _AI_LOCATION: us-central1
+  _AI_LOCATION: europe-west4
   _AGENT_MODEL: gemini-live-2.5-flash-native-audio
   _MIN_INSTANCES: "1"
   # Override _DEMO_CREDENTIALS in the trigger to avoid committing credentials.

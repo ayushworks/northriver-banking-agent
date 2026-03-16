@@ -1,5 +1,5 @@
 # =============================================================================
-# Nova Banking Agent — Developer Makefile
+# NorthRiver Banking Agent — Developer Makefile
 #
 # Usage:  make <target>
 #         make help          list all targets
@@ -14,7 +14,7 @@
 # Config (override via env vars or make flags)
 # ---------------------------------------------------------------------------
 
-SERVICE_NAME  ?= nova-banking-agent
+SERVICE_NAME  ?= northriver-banking-agent
 REGION        ?= europe-west4
 PROJECT       ?= $(GOOGLE_CLOUD_PROJECT)
 PORT          ?= 8080
@@ -32,7 +32,7 @@ SEED          ?= 0   # set to 1 to seed Firestore after deploy
 
 help: ## Show all available targets
 	@echo ""
-	@echo "  Nova Banking Agent — available make targets"
+	@echo "  NorthRiver Banking Agent — available make targets"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	  | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -120,7 +120,7 @@ trigger-setup: ## Register a Cloud Build trigger for push-to-main CI/CD
 	  --branch-pattern="^main$$" \
 	  --build-config=cloudbuild.yaml \
 	  --project=$(PROJECT) \
-	  --description="Nova Banking Agent — deploy on push to main"
+	  --description="NorthRiver Banking Agent — deploy on push to main"
 	@echo "Cloud Build trigger created. Push to main to deploy automatically."
 
 trigger-run: ## Manually trigger a Cloud Build build from the current branch
